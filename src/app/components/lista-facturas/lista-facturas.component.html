@@ -1,0 +1,62 @@
+
+<div class="row" style="width: 100%;">
+    <div class="col-1"></div>
+    <div class="col-10" style="font-size: small;">
+    
+    <!-- <div>
+        <label [(ngModel)]="term" [ngModelOptions]="{standalone: true}"></label>
+    </div> -->
+    <div style="margin-top: 24px; margin-bottom: 24px;">
+        <input placeholder="Buscar factura por: CI, clave accesso, fecha, etc" style="width: 51%;" [(ngModel)]="term" [ngModelOptions]="{standalone: true}" type="text">
+    </div>
+
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th scope="col">PDF</th>
+                <th scope="col">Impr.</th>
+    
+                <th scope="col">Fecha</th>
+                <th scope="col">Clave de acceso</th>
+                <th scope="col">Cliente</th>
+                <th scope="col">CI/RUC</th>
+                <th scope="col">Subtotal</th>
+                <th scope="col">descuento</th>
+    
+                <th scope="col">TOTAL</th>
+    
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let factura of listaFacturas | filter: term ">
+                <td style="text-align: center;">
+                    <button (click)="getPdf(factura.claveAcceso)" class="btn"
+                        style="background-color: #0c4ca3; color:white"><i class="fa fa-file-pdf-o" ></i></button>
+                </td>
+                <td style="text-align: center;">
+                    <button (click)="imprimirXML(factura.claveAcceso)" class="btn"
+                        style="background-color: #0c4ca3; color:white"><i class="fa fa-print"></i></button>
+                </td>
+    
+                <td>{{factura.fecha}}</td>
+    
+                <td>{{factura.claveAcceso }}</td>
+    
+                <td>{{factura.ncliente }}</td>
+    
+                <td>{{factura.identificacionComprador}}</td>
+    
+                <td>{{factura.totalSinImpuestos}}</td>
+    
+                <td>{{factura.totalDescuento}}</td>
+    
+                <td>{{factura.totalConImpuestos| currency:'USD' }}</td>
+    
+            </tr>
+        </tbody>
+    </table>
+    </div>
+    <div class="col-1"></div>
+
+</div>
+

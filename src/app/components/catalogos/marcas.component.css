@@ -1,0 +1,21 @@
+
+.btnYinoSports{
+    color: white;
+    background-color: #0c4ca3;
+    border-radius: 0.25rem;
+    margin-left: 6px;
+    margin-right: 6px;
+}
+
+.btnActivar{
+    background-color: green; color:white
+}
+
+.btnDesactivar{
+    background-color: red; color:white
+}
+
+.btnGuardar{
+    text-align: center;
+    margin-top: 12px;
+}

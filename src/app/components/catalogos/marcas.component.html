@@ -1,0 +1,189 @@
+<div class="row" style="margin-top: 42px;width: 100%;" >
+    
+    <div class="col-1"></div>
+    <div class="col-10">
+        
+        <div class="row">
+            <ng-container *ngIf="!TipoEdit; else elseTemplate">
+                <div class="col-6" style="height:120px; margin-top: 24px;">
+                    <div>
+                        <h4>Tipos de Productos</h4>
+                    </div>
+                    <div>
+                        <label>Ingresar nuevo tipo de producto</label>
+                    </div>
+                    <form>
+                        <div class="row">
+                            <label>Nombre</label>
+                            <input type="text" [(ngModel)]="nombreTipoInsertar" [ngModelOptions]="{standalone: true}" style="text-transform:uppercase; margin-left: 12px; width: 246px">
+                        </div>
+                        <div class="btnGuardar">
+                            <button class="btn btnYinoSports" (click)="guardarTipo()">Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </ng-container>
+
+            <ng-template #elseTemplate>
+                <div class="col-6" style="height:120px; margin-top: 24px;">
+                    <div>
+                        <h4>Tipos de Productos</h4>
+                    </div>
+                    <div>
+                        <label>Modificar Tipo</label>
+                    </div>
+                    <form>
+                        <div class="row">
+                            <label>Nombre</label>
+                            <input  style="text-transform:uppercase; margin-left: 12px; width: 246px" type="text" [(ngModel)]="nombreTipoEditar"
+                        [ngModelOptions]="{standalone: true}">
+                        </div>
+                        <div class="btnGuardar">
+                            <button class="btn btnYinoSports" (click)="modificarTipo()">Guardar Cambios</button>
+                            <button class="btn " style="background-color: red; color:white" (click)="cancelarEditarTipo()">Cancelar</button>
+
+                        </div>
+                    </form>
+                </div>
+            </ng-template>
+            
+<div class="col-6" style="margin-top: 24px;">
+    <div>
+        <label style="margin-right: 12px;">Buscar TIPO de producto: </label> <input [(ngModel)]="filtrarTipos"
+            [ngModelOptions]="{standalone: true}" type="text">
+    </div>
+    <div style="height: 120px; overflow-y: scroll;">
+
+        <table>
+            <thead>
+                <tr>
+
+                    <th scope="col" style="width: 354px;">Nombre</th>
+                    <th scope="col">Editar</th>
+                    <th scope="col">act/des</th>
+
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let tipo of listaTipos | filter: filtrarTipos">
+                    <td>{{tipo.nombre}}</td>
+                    <td><button *ngIf="tipo.estado" class="btn btnYinoSports"
+                            (click)="setTipoEditar(tipo)">edit</button></td>
+                    <td *ngIf="tipo.estado" style="text-align: center"><button (click)="eliminarTipo(tipo)"
+                            class="btn btnDesactivar">-</button></td>
+                    <td *ngIf="!tipo.estado" style="text-align: center"><button (click)="eliminarTipo(tipo)"
+                            class="btn btnActivar">+</button></td>
+                </tr>
+            </tbody>
+
+
+        </table>
+
+
+    </div>
+</div>
+      
+            
+        </div>
+        
+    </div>
+    <div class="col-1"></div>
+
+</div>
+
+<div style="margin-top: 50px;">
+    <hr size="8px" color="black" />
+    
+</div>
+
+<div class="row" style="width: 100%; margin-top: 24px;">
+<div class="col-1"></div>
+<div class="col-10">
+
+    <div class="row">
+<ng-container *ngIf="!MarcaEdit; else elseTemplate1">
+<div class="col-6" style="height:120px;">
+    <div>
+        <h4>Marcas</h4>
+    </div>
+    <div>
+        <label>Ingresar nueva Marca</label>
+    </div>
+    <form>
+        <div class="row">
+            <label>Nombre</label>
+            <input type="text" style="text-transform:uppercase; margin-left: 12px; width: 246px"
+                 [(ngModel)]="nombreMarcaInsertar" [ngModelOptions]="{standalone: true}">
+        </div>
+        <div class="btnGuardar">
+            <button class="btn btnYinoSports" (click)="guardarMarca()">Guardar</button>
+        </div>
+    </form>
+</div>
+</ng-container>
+
+<ng-template #elseTemplate1>
+    <div class="col-6" style="height:120px;">
+        <div>
+            <h4>Marcas</h4>
+        </div>
+        <div>
+            <label>Modificar Marca</label>
+        </div>
+        <form>
+            <div class="row">
+                <label>Nombre</label>
+                <input type="text" style="text-transform:uppercase; margin-left: 12px; width: 246px" [(ngModel)]="nombreMarcaEditar" [ngModelOptions]="{standalone: true}">
+            </div>
+            <div class="btnGuardar">
+                <button class="btn btnYinoSports" (click)="modificarMarca()">Guardar Cambios</button>
+                <button class="btn " style="background-color: red; color:white" (click)="cancelarEditarMarca()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</ng-template>
+        
+
+
+        <div class="col-6">
+            <div>
+                <label style="margin-right: 12px;">Buscar Marca: </label> <input [(ngModel)]="filtrarMarcas"
+                    [ngModelOptions]="{standalone: true}" type="text">
+            </div>
+            <div style="height: 120px; overflow-y: scroll;">
+
+                <table>
+                    <thead>
+                        <tr>
+
+                            <th scope="col" style="width: 354px;">Nombre</th>
+                            <th scope="col">Editar</th>
+                            <th scope="col">act/des</th>
+
+
+
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let marcas of listaMarcas | filter: filtrarMarcas">
+                            <td>{{marcas.nombre}}</td>
+                            <td><button (click)="setMarcaEditar(marcas)" class="btn btnYinoSports" *ngIf="marcas.estado">edit</button></td>
+                            <td *ngIf="marcas.estado" style="text-align: center"><button class="btn btnDesactivar" (click)="eliminarMarca(marcas)">-</button></td>
+                            <td *ngIf="!marcas.estado" style="text-align: center"><button class="btn btnActivar" (click)="eliminarMarca(marcas)">+</button></td>
+
+                        </tr>
+                    </tbody>
+
+
+                </table>
+
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="col-1"></div>
+</div>

@@ -1,0 +1,497 @@
+<div class="row" style="width: 100%; margin-top: 42px;">
+    <div class="col-1"></div>
+        <div class="col-10" style="margin-top: 12px; font-size: small">
+            <div>
+                <h4>Productos activos: {{numProductosActivos}}</h4> 
+            </div>
+            <mat-tab-group mat-align-tabs="center" #matTabProducto (selectedTabChange)="tabChanged($event)">
+                <mat-tab label="Ingresar nuevo producto">
+                    <form #ProductoForm="ngForm" (ngSubmit)="guardarProducto()" role="form">
+                        
+                        <div class="row" style="width: 100%; margin-bottom: 12px;">
+                            <div class="row col-9" style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Nombre
+                                    </b>
+                                    
+                                </label>
+                                    <input style="text-transform:uppercase; width:100%" (keyup)="validarVacios()" [(ngModel)]="nombreInsert" [ngModelOptions]="{standalone: true}"
+                                        placeholder="Nombre del producto" type="text" required>
+                                
+                            </div>
+                            <div class="row col-3" style="margin-left: 12px;">
+                                <label class="label-producto-form" >
+                                    <b>
+                                        Código
+                                    </b>
+                                </label>
+                                
+                                    <input style="text-transform:uppercase; width: 100%;" (keyup)="validarVacios()" [(ngModel)]="codigo_externoInsert" [ngModelOptions]="{standalone: true}"
+                                        type="text" required>
+                                
+                            </div>
+
+                        </div>
+
+                        <div class="row" style="width: 100%; margin-bottom: 12px;">
+
+                            <div class="row col-2 " style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Tipo
+                                    </b>
+                                </label>
+                            
+                                <select style="width: 100%;" (change)="validarVacios()" required name="tiposList" #tiposList="ngModel"
+                                    [(ngModel)]="tipoIdInsert">
+                            
+                                    <option selected value="0" disabled>Seleccione tipo</option>
+                                    <option *ngFor="let tipo of listaTipos" value="{{tipo.id}}">
+                                        {{tipo.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="row col-2 " style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Marca
+                                    </b>
+                                </label>
+                            
+                                <select style="width: 100%;" (change)="validarVacios()" required name="marcasList" #marcasList="ngModel"
+                                    [(ngModel)]="marcaIdInsert">
+                            
+                                    <option selected value="0" disabled>Seleccione marca</option>
+                                    <option *ngFor="let marca of listaMarcas" value="{{marca.id}}">
+                                        {{marca.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="row col-2" style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Talla
+                                    </b>
+                                </label>
+                                <input [disabled]="tipoIdInsert != 1 && tipoIdInsert != 5 && tipoIdInsert != 12" style="width: 100%;" maxlength="6" (keyup)="validarVacios()" [(ngModel)]="tallaInsert" [ngModelOptions]="{standalone: true}"
+                                    placeholder="Talla" type="number" >
+                            </div>
+
+                            
+                            <div class="row col-2" style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Género
+                                    </b>
+                                </label>
+                                <select style="width: 100%;" (change)="validarVacios()" required name="generoList" #generoList="ngModel"
+                                    [(ngModel)]="generoInsert">
+                                
+                                    <option selected value="" disabled>Seleccione genero</option>
+                                    <option *ngFor="let gen of listaGeneros" value="{{gen.letra}}">
+                                        {{gen.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="row col-2" style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Precio de venta
+                                    </b>
+                                </label>
+                                
+                                    <input style="width: 100%;" (keyup)="validarVacios()"  [(ngModel)]="precioInsert" [ngModelOptions]="{standalone: true}"
+                                        placeholder="Precio del producto" type="number" required>
+                                
+                            </div>
+                            <div class="row col-1" style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Stock
+                                    </b>
+                                </label>
+                                
+                                    <input style="width: 100%;" (keyup)="validarVacios()" [(ngModel)]="stockInsert" [ngModelOptions]="{standalone: true}"
+                                        placeholder="Stock del producto" type="number" required>
+                                
+                            </div>
+                                    
+                        </div>
+                                
+
+
+
+                        <div class="row " style="width: 100%; margin-bottom: 12px;">
+                            <div class="row col-12" style="margin-left: 12px;">
+                                <label class="label-producto-form">
+                                    <b>
+                                        Descripción
+                                    </b>
+                                </label>
+                                <textarea style="text-transform:uppercase; width: 100%;" (keyup)="validarVacios();" class="form-control" class="form-control ask-info" name="detail_" #detail_="ngModel"
+                                    [(ngModel)]="descripcionInsert" rows="3" required>
+                                </textarea>
+
+                            </div>
+                            
+                        </div>
+
+                        <div class="text-center">
+                            <button [disabled]="!datosCompletos" type="button" class="btn" style="background-color: #0c4ca3;color:white" (click)="guardarProducto()">Guardar producto</button>
+                        </div>
+                            
+                        
+                    </form>
+                </mat-tab>
+                
+                    
+
+                <mat-tab label="Buscar productos">
+                        <mat-radio-group class="example-radio-group" [(ngModel)]="tipoBusqueda"
+                            (change)="radiotipoBusqueda($event)">
+                            <mat-radio-button class="example-radio-button"  value="normal">
+                                <span class="wrap-mat-radio-label">
+                                   Buscar los primeros <input [disabled]="tipoBusqueda == 'avanzada'" style="width:'90px'"  [(ngModel)]="limit" [ngModelOptions]="{standalone: true}" type="number" min="100" >
+                                   
+                                <input [disabled]="tipoBusqueda == 'avanzada'" style="margin-left: 12px;" [(ngModel)]="term" #busqueda="ngModel" name="termB"
+                                    placeholder="Buscar productos" >
+                                </span>
+
+                                </mat-radio-button>
+                        
+                            <mat-radio-button class="example-radio-button"  value="avanzada">
+                                <span class="wrap-mat-radio-label">
+                                    Busqueda avanzada con filtros
+                                </span>
+                            </mat-radio-button>
+                        </mat-radio-group>
+
+                                                
+                        <div class="container" *ngIf="tipoBusqueda == 'avanzada'">
+                             
+                            <input [(ngModel)]="termB" style="width: 100%;" type="text" (change)="filtrosCambios()" placeholder="BUSCAR POR NOMBRE, CODIGOS Y DESCRIPCIÓN"> 
+
+                            <div class="row">
+                                <div class="col-2">
+                                    <label>Tipo</label>
+                                    <select (change)="filtrosCambios()" style="width: 100%;" required name="tiposListBusqueda"
+                                        #tiposListBusqueda="ngModel" [(ngModel)]="tipoIdBusqueda">
+                                
+                                        <option selected value="0">Todo tipo</option>
+                                        <option *ngFor="let tipo of listaTipos " value="{{tipo.id}}">
+                                            {{tipo.nombre}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                <div class="col-2">
+                                    <label>Marca</label>
+                                    <select (change)="filtrosCambios()" style="width: 100%;" required name="marcasListBusqueda" #marcasListBusqueda="ngModel"
+                                        [(ngModel)]="marcaIdBusqueda">
+                                    
+                                        <option selected value="0">Toda marca</option>
+                                        <option *ngFor="let marca of listaMarcas " value="{{marca.id}}">
+                                            {{marca.nombre}}
+                                        </option>
+                                    </select>
+                                </div>
+
+                                
+
+                                <div class="col-1">
+                                    <label>pvp < =</label>
+                                    <input (change)="filtrosCambios()" style="width: 100%;" type="number" [(ngModel)]="precioFiltro"> 
+                                </div>
+
+                                <div class="col-3 row">
+                                    <div>
+                                        <mat-radio-group (change)="filtrosCambios()" class="example-radio-group" [(ngModel)]="tallaMayorIgual" >
+                                            <mat-radio-button class="example-radio-button" value="false">
+                                                <span class="wrap-mat-radio-label">
+                                                    Talla < = 
+                                                </span>
+                                        
+                                            </mat-radio-button>
+                                        
+                                            <mat-radio-button class="example-radio-button" value="true">
+                                                <span class="wrap-mat-radio-label">
+                                                    Talla > =
+                                                </span>
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+                                    <div>
+                                        <input (change)="filtrosCambios()" style="width: 60px; position: relative; top: 30px;" type="number" [(ngModel)]="tallaFiltro">
+                                    </div>
+                                </div>
+
+                                <div class="col-1">
+                                    <label>género</label> 
+                                    <select (change)="filtrosCambios()" style="width: 100%;" required name="generoFiltroS" #generoFiltroS="ngModel"
+                                        [(ngModel)]="generoFiltro">
+                                    
+                                        <option selected value="">Todo genero</option>
+                                        <option *ngFor="let gen of listaGeneros" value="{{gen.letra}}">
+                                            {{gen.nombre}}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-3 row">
+                                    <div>
+                                        <mat-radio-group (change)="filtrosCambios()" class="example-radio-group" [(ngModel)]="stockMayorIgual">
+                                            <mat-radio-button class="example-radio-button" value="false">
+                                                <span class="wrap-mat-radio-label">
+                                                    Stock < =
+                                                </span>
+                                    
+                                            </mat-radio-button>
+                                    
+                                            <mat-radio-button class="example-radio-button" value="true">
+                                                <span class="wrap-mat-radio-label">
+                                                    Stock > =
+                                                </span>
+                                            </mat-radio-button>
+                                        </mat-radio-group>
+                                    </div>
+
+                                    <div>
+                                        <input (change)="filtrosCambios()" style="width: 60px; position: relative; top: 30px;" type="number" [(ngModel)]="stockFiltro">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                       
+
+                    <table class="table table-responsive-lg table-striped table-hover">
+                        <thead>
+                            <tr >
+                                
+                                <th scope="col">ID</th>
+                                <th scope="col">TIPO</th>
+
+                                <th scope="col">COD. ÚNICO</th>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">MARCA</th>
+
+                                <th scope="col">TALLA</th>
+                                <th scope="col">PVP</th>
+                                <th scope="col" style="text-align: center;">EDITAR</th>
+                                <th scope="col" style="text-align: center;">ELIMI/ACTI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let product of listaProductos | filter: term ">
+                                
+                                <td *ngIf="product.estado">{{product.id}}</td>
+                                <td *ngIf="!product.estado" style="color: #7a7a7a;">{{product.id}}</td>
+
+                                <td *ngIf="product.estado">{{product.tipo }}</td>
+                                <td *ngIf="!product.estado" style="color: #7a7a7a;">{{product.tipo }}</td>
+
+                                <td *ngIf="product.estado">{{product.codigo_interno }}</td>
+                                <td *ngIf="!product.estado" style="color: #7a7a7a;">{{product.codigo_interno }}</td>
+
+
+                                <td *ngIf="product.estado">{{product.nombre}}</td>
+                                <td *ngIf="!product.estado" style="color: #7a7a7a;">{{product.nombre}}</td>
+
+                                <td *ngIf="product.estado">{{product.marca}}</td>
+                                <td *ngIf="!product.estado" style="color: #7a7a7a;">{{product.marca}}</td>
+
+                                <td *ngIf="product.estado">{{product.talla}}</td>
+                                <td *ngIf="!product.estado" style="color: #7a7a7a;">{{product.talla}}</td>
+
+                                <td *ngIf="product.estado">{{product.precio| currency:'USD' }}</td>
+                                <td *ngIf="!product.estado" style="color: #7a7a7a;">{{product.precio| currency:'USD'}}</td>
+                    
+                                <td style="text-align: center;">
+                                    
+                                    <button (click)="cargarActualizarProducto(product)" class="btn" style="background-color: #0c4ca3; color:white" *ngIf="product.estado;" title="Editar producto" data-placement="top"
+                                        data-toggle="modal" data-target="#updateProduct" data-backdrop="static" data-keyboard="false"
+                                        >EDIT</button>
+                                    
+                                </td>
+                                <td style="text-align: center;">
+                                    <button style="background-color: red; color:white"*ngIf="product.estado; else activar" class="btn" (click)="eliminarProducto(product.id, product.estado)">X</button>
+                                    <ng-template #activar>
+                                        <button class="btn" style="background-color: green; color:white" (click)="eliminarProducto(product.id, product.estado)">+</button>
+                                    </ng-template>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </mat-tab>
+                
+            </mat-tab-group>
+        </div>
+    <div class="col-1"></div>
+</div>
+
+<div class="modal fade " id="updateProduct" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-full modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar producto</h5>
+                <button (click)="cargardespuesUpdate()" type="button" class="close" id="btnCerrarActualizarProd " data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #updateProduct="ngForm" >
+
+
+                    <div class="row" style="width: 100%; margin-bottom: 12px;">
+                        <div class="row col-9" style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Nombre
+                                </b>
+                            </label>
+                    
+                            <input style="text-transform:uppercase; width:100%" (keyup)="validarVaciosUpdate()" [(ngModel)]="nombreUpdate"
+                                [ngModelOptions]="{standalone: true}" placeholder="Nombre del producto" type="text" required>
+                    
+                        </div>
+                        <div class="row col-3" style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Código
+                                </b>
+                            </label>
+                    
+                            <input style="text-transform:uppercase; width: 100%;" (keyup)="validarVaciosUpdate()"
+                                [(ngModel)]="codigo_externoUpdate" [ngModelOptions]="{standalone: true}" type="text" required>
+                    
+                        </div>
+                    
+                    </div>
+                    
+                    <div class="row" style="width: 100%; margin-bottom: 12px;">
+                    
+                        <div class="row col-2 " style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Tipo
+                                </b>
+                            </label>
+                    
+                            <select style="width: 100%;" (change)="validarVaciosUpdate()" required name="tiposList" #tiposList="ngModel"
+                                [(ngModel)]="tipoIdUpdate">
+                    
+                                <option selected value="0" disabled>Seleccione tipo</option>
+                                <option *ngFor="let tipo of listaTipos" value="{{tipo.id}}">
+                                    {{tipo.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    
+                        <div class="row col-2 " style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Marca
+                                </b>
+                            </label>
+                    
+                            <select style="width: 100%;" (change)="validarVaciosUpdate()" required name="marcasList" #marcasList="ngModel"
+                                [(ngModel)]="marcaIdUpdate">
+                    
+                                <option selected value="0" disabled>Seleccione marca</option>
+                                <option *ngFor="let marca of listaMarcas" value="{{marca.id}}">
+                                    {{marca.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                    
+                        <div class="row col-2" style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Talla
+                                </b>
+                            </label>
+                            <input [disabled]="tipoIdUpdate != 1 && tipoIdUpdate != 5 && tipoIdInsert != 12" style="width: 100%;" maxlength="6"
+                                (keyup)="validarVaciosUpdate()" [(ngModel)]="tallaUpdate" [ngModelOptions]="{standalone: true}"
+                                placeholder="Talla" type="number">
+                        </div>
+                    
+                    
+                        <div class="row col-2" style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Género
+                                </b>
+                            </label>
+                            <select style="width: 100%;" (change)="validarVaciosUpdate()" required name="generoList" #generoList="ngModel"
+                                [(ngModel)]="generoUpdate">
+                    
+                                <option selected value="" disabled>Seleccione genero</option>
+                                <option *ngFor="let gen of listaGeneros" value="{{gen.letra}}">
+                                    {{gen.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="row col-2" style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Precio de venta
+                                </b>
+                            </label>
+                    
+                            <input style="width: 100%;" (keyup)="validarVaciosUpdate()" [(ngModel)]="precioUpdate"
+                                [ngModelOptions]="{standalone: true}" placeholder="Precio del producto" type="number" required>
+                    
+                        </div>
+                        <div class="row col-1" style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Stock
+                                </b>
+                            </label>
+                    
+                            <input style="width: 100%;" (keyup)="validarVaciosUpdate()" [(ngModel)]="stockUpdate"
+                                [ngModelOptions]="{standalone: true}" placeholder="Stock del producto" type="number" required>
+                    
+                        </div>
+                    
+                    </div>
+                    
+                    
+                    
+                    
+                    <div class="row " style="width: 100%; margin-bottom: 12px;">
+                        <div class="row col-12" style="margin-left: 12px;">
+                            <label class="label-producto-form">
+                                <b>
+                                    Descripción
+                                </b>
+                            </label>
+                            <textarea style="text-transform:uppercase; width: 100%;" (keyup)="validarVaciosUpdate();" class="form-control"
+                                class="form-control ask-info" name="detail_" #detail_="ngModel" [(ngModel)]="descripcionUpdate" rows="3"
+                                required>
+                                                    </textarea>
+                    
+                        </div>
+                    
+                    </div>
+                    
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="!datosCompletosUpdate" (click)="onUpdateProduct()" class="btn btn-primary">Actualizar&nbsp;
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    
+
+
+

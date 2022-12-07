@@ -1,0 +1,457 @@
+<div class="row" style="width: 100%; margin-top: 42px;">
+
+    <div class="col-1"></div>
+    <div class="col-10" style="margin-top: 12px; font-size: small">
+        <form #facturaForm="ngForm" role="form">
+            <div class="row" style="width: 100%; margin-bottom: 12px;">
+                
+                    <label class="label-producto-form">
+                        <b>
+                            Identificación de comprador
+                        </b>
+                    </label>
+            
+                    <input [disabled]="consumidorFinal" style="text-transform:uppercase; width:300px; " class="margen-left" (keyup)="buscarCliente()" [(ngModel)]="dniCliente"
+                        [ngModelOptions]="{standalone: true}" placeholder="CI/pasaporte" type="text" required>
+
+                        <select [disabled]="consumidorFinal || usuarioEncontrado" style="width: 200px;" class="margen-left" name="dniList" #dniList="ngModel" [(ngModel)]="tipoDNI">
+                        
+                            <option *ngFor="let dni of listaDNI" value="{{dni.value}}">
+                                {{dni.option}}
+                            </option>
+                        </select>
+
+                    
+                    
+                    <mat-checkbox (change)="consumidorFinalChange()" class="margen-left" [(ngModel)]="consumidorFinal" [ngModelOptions]="{standalone: true}">Consumidor Final</mat-checkbox>
+            
+            </div>
+            <div class="row" style="width: 100%; margin-bottom: 12px;">
+                <div class="col-8">
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Nombre:</label>
+                        <input class="margen-left" style="width: 600px;" [disabled]="consumidorFinal||usuarioEncontrado || dniCliente.length < 10 " type="text" [(ngModel)]="nombreCliente"
+                        [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Dirección:</label>
+                        <input class="margen-left" style="width: 594px;" [disabled]="consumidorFinal||usuarioEncontrado || dniCliente.length < 10" type="text" [(ngModel)]="direccion" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Teléfono:</label>
+                        <input class="margen-left" [disabled]="consumidorFinal||usuarioEncontrado || dniCliente.length < 10" type="tel" [(ngModel)]="telefono" [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Email:</label>
+                        <input class="margen-left" style="width: 260px;" [disabled]="consumidorFinal||usuarioEncontrado || dniCliente.length < 10" type="email" [(ngModel)]="emailCliente" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            
+            
+                <div class="row">
+                    <div class="col-3">
+                        <label>Forma de pago:</label>
+                        <select style="width: 200px;" class="margen-left" name="pagosList" #pagosList="ngModel"
+                            [(ngModel)]="formaPago">
+                        
+                            <option *ngFor="let pago of listaPagos" value="{{pago.value}}">
+                                {{pago.option}}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="col-9">
+                        <div *ngIf="formaPago == '19'">
+                            <mat-radio-group class="example-radio-group" [(ngModel)]="diferido" [ngModelOptions]="{standalone: true}" (change)="radioDiferido($event)">
+                                <mat-radio-button class="example-radio-button" value="false">
+                                    <span class="wrap-mat-radio-label">
+                                        Corriente 
+                                    </span>
+                            
+                                </mat-radio-button>
+                            
+                                <mat-radio-button class="example-radio-button" value="true">
+                                    <span class="wrap-mat-radio-label">
+                                        Diferido 
+                                        <input [disabled]="diferido === 'false'" style="width:'90px'" [(ngModel)]="plazo"
+                                            [ngModelOptions]="{standalone: true}" type="number" >
+                                        Meses
+                                    </span>
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="row" style="margin-top: 12px;">
+                    
+                    <div class="col-9" style="margin-top: 12px;">
+                        <div style="text-align: end;">
+                            <button (click)="cargardespuesUpdate()" class="btn btn-secondary btn-sm" style="margin-bottom: 12px;" data-placement="top"
+                                        data-toggle="modal" data-target="#buscarProduct" data-backdrop="static" data-keyboard="false">Buscar Productos</button>
+                            
+                        </div>
+                        <div style="height: 300px; overflow-y: scroll;">
+                            <table class="table table-bordered table-sm">
+                                <thead>
+                                    <tr>
+                                
+                                        <th scope="col">COD.</th>
+                                        <th scope="col">UNIDADES</th>
+                                        <th scope="col">PVP</th>
+                                        <th scope="col">DESC.</th>
+                                        
+                                        <th scope="col">NOMBRE</th>
+                                        <th scope="col">MARCA</th>
+                                
+                                        <th scope="col">TALLA</th>
+                                        
+
+                                        <th scope="col" style="text-align: center;"></th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let product of listaProductos ">
+                                
+                                        
+                                        
+                                        <td >{{product.codigo_interno }}</td>
+                                        <td><input (keyup)="setCantidadMinima(product);calcular()" type="number" style="width: 45px;" [(ngModel)]="product.cantidad" [ngModelOptions]="{standalone: true}"></td>
+                                        <td>{{product.precio| currency:'USD' }}</td>
+                                        
+                                        <td><input (keyup)="calcular()" type="number" style="width: 65px;" [(ngModel)]="product.descuentoInput" [ngModelOptions]="{standalone: true}"></td>
+                                
+                                
+                                
+                                        <td >{{product.nombre}}</td>
+                                        
+                                
+                                        <td >{{product.marca}}</td>
+                                        
+                                
+                                        <td >{{product.talla}}</td>
+                                        
+                                
+                                        
+                                        
+                                        
+                                        
+                                        <td >
+                                            <button class="btn btn-sm"
+                                            style="background-color: red;height: 20px; font-size: x-small;     padding: 2px; color:white"
+                                                    (click)="eliminarProducto(product)">-</button>
+                                            
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="col-3">
+                        <table class="table">
+                            <tbody class="total-values">
+                                <tr>
+                                    <th>Total descuento (sin iva):</th>
+                                    <td style="text-align: end;">
+                                        {{descuento | currency: 'USD'}}
+                                
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th>Subtotal (sin iva):</th>
+                                    <td style="text-align: right">{{subtotal | currency: 'USD'}}</td>
+                                </tr>
+                                <tr>
+                                    <th>baseImponible 12%:</th>
+                                    <td style="text-align: right">{{grava_12 | currency: 'USD'}}</td>
+                                </tr>
+                                
+                                
+                                
+                                <tr>
+                                    <th>Subtotal exento de iva:</th>
+                                    <td style="text-align: right">{{grava_0| currency: 'USD' }}</td>
+                                </tr>
+                                <tr>
+                                    <th>IVA (12%):</th>
+                                    <td style="text-align: right">{{iva | currency: 'USD'}}</td>
+                                </tr>
+                                <tr style="font-weight: bolder !important; font-size: x-large !important;">
+                                    <th style="font-weight: bolder;">Total:</th>
+                                    <td style="text-align: right">
+                                        {{total | currency: 'USD'}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="text-align: end;">
+                            <button [disabled]="total <= 0 || (diferido === 'true' && plazo <= 0) ||dniCliente.length < 10 || nombreCliente.length < 5 || emailCliente.length < 1 || direccion.length < 5" (click)="facturar()" class="btn" style="color: white; background-color: green;">Firmar y autorizar</button>
+                        </div>
+                    </div>
+                </div>
+        </form>
+        <div style="height: 100px;">
+
+        </div>
+    </div>
+    <div class="col-1"></div>
+
+</div>
+
+
+<div class="modal fade " id="buscarProduct" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-full modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Buscar productos</h5>
+                <button type="button" class="close" id="close2" data-dismiss="modal"
+                    aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" style="font-size: small !important;">
+                
+                <mat-radio-group class="example-radio-group" [(ngModel)]="tipoBusqueda" (change)="radiotipoBusqueda($event)">
+                    <mat-radio-button class="example-radio-button" value="normal">
+                        <span class="wrap-mat-radio-label">
+                            Buscar los primeros <input [disabled]="tipoBusqueda == 'avanzada'" style="width:'90px'" [(ngModel)]="limit"
+                                [ngModelOptions]="{standalone: true}" type="number" min="100">
+                            <input [disabled]="tipoBusqueda == 'avanzada'" style="margin-left: 12px;" [(ngModel)]="termB"
+                                #busqueda="ngModel" name="termB" placeholder="Buscar productos">
+                        </span>
+                
+                    </mat-radio-button>
+                
+                    <mat-radio-button class="example-radio-button" value="avanzada">
+                        <span class="wrap-mat-radio-label">
+                            Busqueda avanzada con filtros
+                        </span>
+                    </mat-radio-button>
+                </mat-radio-group>
+                
+                
+                <div class="container" *ngIf="tipoBusqueda == 'avanzada'">
+                
+                    <input [(ngModel)]="termB" style="width: 100%;" type="text" (change)="filtrosCambios()"
+                        placeholder="BUSCAR POR NOMBRE, CODIGOS Y DESCRIPCIÓN">
+                
+                    <div class="row">
+                        <div class="col-2">
+                            <label>Tipo</label>
+                            <select (change)="filtrosCambios()" style="width: 100%;" required name="tiposListBusqueda"
+                                #tiposListBusqueda="ngModel" [(ngModel)]="tipoIdBusqueda">
+                
+                                <option selected value="0">Todo tipo</option>
+                                <option *ngFor="let tipo of listaTipos " value="{{tipo.id}}">
+                                    {{tipo.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                
+                        <div class="col-2">
+                            <label>Marca</label>
+                            <select (change)="filtrosCambios()" style="width: 100%;" required name="marcasListBusqueda"
+                                #marcasListBusqueda="ngModel" [(ngModel)]="marcaIdBusqueda">
+                
+                                <option selected value="0">Toda marca</option>
+                                <option *ngFor="let marca of listaMarcas " value="{{marca.id}}">
+                                    {{marca.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                
+                
+                
+                        <div class="col-1">
+                            <label>pvp < =</label>
+                            <input (change)="filtrosCambios()" style="width: 100%;" type="number" [(ngModel)]="precioFiltro">
+                        </div>
+                        <div class="col-3 row">
+                            <div>
+                                <mat-radio-group (change)="filtrosCambios()" class="example-radio-group" [(ngModel)]="tallaMayorIgual">
+                                    <mat-radio-button class="example-radio-button" value="false">
+                                        <span class="wrap-mat-radio-label">
+                                            Talla < =
+                                        </span>
+                
+                                    </mat-radio-button>
+                
+                                    <mat-radio-button class="example-radio-button" value="true">
+                                        <span class="wrap-mat-radio-label">
+                                            Talla > =
+                                        </span>
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div>
+                                <input (change)="filtrosCambios()" style="width: 60px; position: relative; top: 30px;" type="number"
+                                    [(ngModel)]="tallaFiltro">
+                            </div>
+                        </div>
+                
+                        <div class="col-1">
+                            <label>género</label>
+                            <select (change)="filtrosCambios()" style="width: 100%;" required name="generoFiltroS"
+                                #generoFiltroS="ngModel" [(ngModel)]="generoFiltro">
+                
+                                <option selected value="">Todo genero</option>
+                                <option *ngFor="let gen of listaGeneros" value="{{gen.letra}}">
+                                    {{gen.nombre}}
+                                </option>
+                            </select>
+                        </div>
+                        <div class="col-3 row">
+                            <div>
+                                <mat-radio-group (change)="filtrosCambios()" class="example-radio-group" [(ngModel)]="stockMayorIgual">
+                                    <mat-radio-button class="example-radio-button" value="false">
+                                        <span class="wrap-mat-radio-label">
+                                            Stock <=</span>
+                        
+                                    </mat-radio-button>
+                        
+                                    <mat-radio-button class="example-radio-button" value="true">
+                                        <span class="wrap-mat-radio-label">
+                                            Stock > =
+                                        </span>
+                                    </mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                        
+                            <div>
+                                <input (change)="filtrosCambios()" style="width: 60px; position: relative; top: 30px;" type="number"
+                                    [(ngModel)]="stockFiltro">
+                        
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div style="height: 231px; overflow-y: scroll;">
+
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                    
+                                <th scope="col">ID</th>
+                                <th scope="col">TIPO</th>
+                    
+                                <th scope="col">COD. ÚNICO</th>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">MARCA</th>
+                    
+                                <th scope="col">TALLA</th>
+                                <th scope="col">PVP</th>
+                                <th scope="col" style="text-align: center;"></th>
+                            
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let product of listaProductosBuscados | filter: termB ">
+                                <tr  *ngIf="product.estado && product.stock > 0">
+                        
+                                    <td *ngIf="product.estado">{{product.id}}</td>
+                                    
+                        
+                                    <td *ngIf="product.estado">{{product.tipo }}</td>
+                                    
+                        
+                                    <td *ngIf="product.estado">{{product.codigo_interno }}</td>
+                                    
+                        
+                        
+                                    <td *ngIf="product.estado">{{product.nombre}}</td>
+                                    
+                        
+                                    <td *ngIf="product.estado">{{product.marca}}</td>
+                                    
+                        
+                                    <td *ngIf="product.estado">{{product.talla}}</td>
+                                    
+                        
+                                    <td *ngIf="product.estado">{{product.precio| currency:'USD' }}</td>
+                                    
+                        
+                                    <td style="text-align: center;">
+                        
+                                        <!-- <button class="btn btn-sm" style="background-color: green;">+</button> -->
+                                        <button (click)="agregarProducto(product)" class="btn btn-sm" style="background-color: green;height: 18px; font-size: x-small;     padding: 2px; color:white">+</button>
+                                    </td>
+                                    
+                                </tr>
+    
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div>
+                    <h4 style="border-bottom: 1px solid #c6c6c6; padding-bottom: 10px;">Productos seleccionados</h4>
+                </div>
+
+                <div style="height: 231px; overflow-y: scroll;">
+                
+                    <table class="table table-bordered table-sm">
+                        <thead>
+                            <tr>
+                
+                                <th scope="col">ID</th>
+                                <th scope="col">TIPO</th>
+                
+                                <th scope="col">COD. ÚNICO</th>
+                                <th scope="col">NOMBRE</th>
+                                <th scope="col">MARCA</th>
+                
+                                <th scope="col">TALLA</th>
+                                <th scope="col">PVP</th>
+                                <th scope="col" style="text-align: center;"></th>
+                
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let product of listaProductos ">
+                                <tr >
+                
+                                    <td *ngIf="product.estado">{{product.id}}</td>
+                                    
+                
+                                    <td *ngIf="product.estado">{{product.tipo }}</td>
+                                    
+                
+                                    <td *ngIf="product.estado">{{product.codigo_interno }}</td>
+                                    
+                
+                
+                                    <td *ngIf="product.estado">{{product.nombre}}</td>
+                                    
+                
+                                    <td *ngIf="product.estado">{{product.marca}}</td>
+                                    
+                
+                                    <td *ngIf="product.estado">{{product.talla}}</td>
+                                    
+                
+                                    <td *ngIf="product.estado">{{product.precio| currency:'USD' }}</td>
+                                    
+                
+                                    <td style="text-align: center;">
+                
+                                        <!-- <button class="btn btn-sm" style="background-color: green;">+</button> -->
+                                        <button (click)="eliminarProducto(product)" class="btn btn-sm"
+                                            style="background-color: red;height: 20px; font-size: x-small;     padding: 2px; color:white">-</button>
+                                    </td>
+                
+                                </tr>
+                
+                            </ng-container>
+                        </tbody>
+                    </table>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,34 @@
+.margen-left{
+    margin-left: 12px;
+}
+.label-producto-form {
+    margin-right: 25px;
+}
+
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+    align-items: flex-start;
+}
+
+.example-radio-button {
+    margin: 5px;
+}
+.modal-full {
+    min-width: 80%;
+    margin-left: 80;
+}
+
+.modal-full .modal-content {
+    min-height: 90vh;
+}
+
+.modal-medium {
+    min-width: 50%;
+    margin-left: 80;
+}
+
+.modal-medium .modal-content {
+    min-height: 90vh;
+}

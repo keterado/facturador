@@ -1,0 +1,18 @@
+.btn-verde{
+    background-color: #0c4ca3;
+    border-radius: 0.25rem;
+}
+
+.btn-logout{
+    color: #343a40;
+    background-color: #feb914;
+    font-weight: 700;
+}
+
+.stiky{
+    overflow: hidden;
+    position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 2;
+}

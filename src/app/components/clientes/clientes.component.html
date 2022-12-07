@@ -1,0 +1,212 @@
+<div class="row" style="width: 100%; margin-top: 42px;">
+    <div class="col-1"></div>
+    <div class="col-10" style="font-size: small">
+        <h4>Clientes</h4>
+        <mat-tab-group mat-align-tabs="center" #matTabProducto (selectedTabChange)="tabChanged($event)">
+            <mat-tab label="Ingresar nuevo cliente">
+                <form style=" margin-left:21px; margin-top: 24px;">
+                    <div class="row" style="width: 100%; margin-bottom: 12px;">
+                    
+                        <label>
+                            <b>
+                                Identificación de comprador
+                            </b>
+                        </label>
+                
+                        <input (change)="validarVaciosInsert()" (keyup)="validarVaciosInsert()" style=" width:300px; " class="margen-left" [(ngModel)]="dniClienteInsert"
+                            [ngModelOptions]="{standalone: true}" placeholder="CI/pasaporte" type="text" required>
+    
+                            <select style="width: 200px;" class="margen-left" name="dniList" #dniList="ngModel" [(ngModel)]="tipoIdInsert">
+                            
+                                <option *ngFor="let dni of listaDNI" value="{{dni.value}}">
+                                    {{dni.option}}
+                                </option>
+                            </select>
+    
+                        <!-- <button class="btn margen-left btn-secondary btn-sm" *ngIf="usuarioEncontrado && !consumidorFinal">Editar Cliente</button> -->
+                        
+                    </div>
+
+
+                    
+            
+            <div class="row" style="width: 100%; margin-bottom: 12px;">
+                <div class="col-8">
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Nombre:</label>
+                        <input (keyup)="validarVaciosInsert()" (change)="validarVaciosInsert()" class="margen-left" style="text-transform:uppercase; width: 600px;" type="text" [(ngModel)]="nombreinsert"
+                        [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Dirección:</label>
+                        <input (keyup)="validarVaciosInsert()" (change)="validarVaciosInsert()" class="margen-left" style="text-transform:uppercase; width: 594px;" type="text" [(ngModel)]="direccionInsert" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+                <div class="col-4">
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Teléfono:</label>
+                        <input (keyup)="validarVaciosInsert()" (change)="validarVaciosInsert()" class="margen-left" type="tel" [(ngModel)]="telefonoInsert" [ngModelOptions]="{standalone: true}">
+                    </div>
+                    <div class="row" style=" margin-bottom: 12px; ">
+                        <label>Email:</label>
+                        <input (keyup)="validarVaciosInsert()" (change)="validarVaciosInsert()" class="margen-left" style="width: 260px;" type="email" [(ngModel)]="emailInsert" [ngModelOptions]="{standalone: true}">
+                    </div>
+                </div>
+            </div>
+            <button class="btn btnYinoSports" style="position: relative; float:right" [disabled]="!camposInsertCompletos" (click)="guardarCliente()">Guardar cliente</button>
+        </form>
+            </mat-tab>
+            <mat-tab label="Buscar cliente">
+                <div class="container">
+                      <div>
+                        <label>Buscar los primero: </label> <input [(ngModel)]="limit" [ngModelOptions]="{standalone: true}" type="number" >
+                      </div> 
+                      <div style="margin-top: 24px; margin-bottom: 24px;">
+                          <label>Buscar cliente: </label>
+                          <input [(ngModel)]="termB" style="width: 72%;" type="text" placeholder="BUSCAR POR NOMBRE, CI/RUC, EMAIL"> 
+                      </div>      
+
+                    <table class="table table-sm">
+                        <thead>
+                            <tr >
+                                
+
+                                <th scope="col-2">Nombre</th>
+
+                                
+                                <th scope="col-1">TIPO</th>
+
+                                <th scope="col-1">CI/RUC</th>
+                                <th scope="col-2">direccion</th>
+
+                                <th scope="col-1">telefono</th>
+                                <th scope="col-2">email</th>
+                                <th scope="col-1" style="text-align: center;">EDITAR</th>
+                                <th scope="col-1" style="text-align: center;">ELIMI/ACTI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cliente of listaClientes | filter: termB " style="height: 30px !important;">
+                                
+                                <td *ngIf="cliente.estado">{{cliente.nombreCompleto }}</td>
+                                <td *ngIf="!cliente.estado" style="color: #7a7a7a;">{{cliente.nombreCompleto }}</td>
+
+                                <td *ngIf="cliente.estado">{{cliente.tipoDescripcion }}</td>
+                                <td *ngIf="!cliente.estado" style="color: #7a7a7a;">{{cliente.tipoDescripcion }}</td>
+
+
+                                <td *ngIf="cliente.estado">{{cliente.identificacionComprador}}</td>
+                                <td *ngIf="!cliente.estado" style="color: #7a7a7a;">{{cliente.identificacionComprador}}</td>
+
+                                <td *ngIf="cliente.estado">{{cliente.direccion}}</td>
+                                <td *ngIf="!cliente.estado" style="color: #7a7a7a;">{{cliente.direccion}}</td>
+
+                                <td *ngIf="cliente.estado">{{cliente.telefono}}</td>
+                                <td *ngIf="!cliente.estado" style="color: #7a7a7a;">{{cliente.telefono}}</td>
+
+                                <td *ngIf="cliente.estado">{{cliente.email }}</td>
+                                <td *ngIf="!cliente.estado" style="color: #7a7a7a;">{{cliente.email}}</td>
+                    
+                                <td style="text-align: center;">
+                                    
+                                    <button (click)="cargarActualizarCliente(cliente)" class="btn btnYinoSports" *ngIf="cliente.estado;" title="Editar Cliente" data-placement="top"
+                                        data-toggle="modal" data-target="#updateCliente" data-backdrop="static" data-keyboard="false"
+                                        >EDIT</button>
+                                    
+                                </td>
+                                <td style="text-align: center;">
+                                    <button *ngIf="cliente.estado; else activar" class="btn btnDesactivar" (click)="activarDesactivarCliente(cliente)">X</button>
+                                    <ng-template #activar>
+                                        <button class="btn btnActivar" (click)="activarDesactivarCliente(cliente)">+</button>
+                                    </ng-template>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </mat-tab>
+
+        </mat-tab-group>
+    </div>
+    <div class="col-1"></div>
+</div>
+
+<div class="modal fade " id="updateCliente" tabindex="-1" role="dialog"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-full modal-xl modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Actualizar Cliente</h5>
+                <button (click)="cargardespuesUpdate()" type="button" class="close" id="close2" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form #updateCliente="ngForm" >
+                    <form style=" margin-left:21px; margin-top: 24px;">
+                        <div class="row" style="width: 100%; margin-bottom: 12px;">
+                        
+                            <label>
+                                <b>
+                                    Identificación de comprador
+                                </b>
+                            </label>
+                    
+                            <input (change)="validarVaciosUpdate()" (keyup)="validarVaciosUpdate()" style=" width:300px; " class="margen-left" [(ngModel)]="dniClienteUpdate"
+                                [ngModelOptions]="{standalone: true}" placeholder="CI/pasaporte" type="text" required>
+        
+                                <select style="width: 200px;" class="margen-left" name="dniList" #dniList="ngModel" [(ngModel)]="tipoIdUpdate">
+                                
+                                    <option *ngFor="let dni of listaDNI" value="{{dni.value}}">
+                                        {{dni.option}}
+                                    </option>
+                                </select>
+        
+                            <!-- <button class="btn margen-left btn-secondary btn-sm" *ngIf="usuarioEncontrado && !consumidorFinal">Editar Cliente</button> -->
+                            
+                        </div>
+    
+    
+                        
+                
+                <div class="row" style="width: 100%; margin-bottom: 12px;">
+                    <div class="col-8">
+                        <div class="row" style=" margin-bottom: 12px; ">
+                            <label>Nombre:</label>
+                            <input (keyup)="validarVaciosUpdate()" (change)="validarVaciosUpdate()" class="margen-left" style="text-transform:uppercase; width: 600px;" type="text" [(ngModel)]="nombreUpdate"
+                            [ngModelOptions]="{standalone: true}">
+                        </div>
+                        <div class="row" style=" margin-bottom: 12px; ">
+                            <label>Dirección:</label>
+                            <input (keyup)="validarVaciosUpdate()" (change)="validarVaciosUpdate()" class="margen-left" style="text-transform:uppercase; width: 594px;" type="text" [(ngModel)]="direccionUpdate" [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="row" style=" margin-bottom: 12px; ">
+                            <label>Teléfono:</label>
+                            <input (keyup)="validarVaciosUpdate()" (change)="validarVaciosUpdate()" class="margen-left" type="tel" [(ngModel)]="telefonoUpdate" [ngModelOptions]="{standalone: true}">
+                        </div>
+                        <div class="row" style=" margin-bottom: 12px; ">
+                            <label>Email:</label>
+                            <input (keyup)="validarVaciosUpdate()" (change)="validarVaciosUpdate()" class="margen-left" style="width: 260px;" type="email" [(ngModel)]="emailUpdate" [ngModelOptions]="{standalone: true}">
+                        </div>
+                    </div>
+                </div>
+                <!-- <button class="btn btnYinoSports" style="position: relative; float:right" [disabled]="!camposUpdateCompletos" (click)="modificarCliente()">Guardar cliente</button> -->
+            </form>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button [disabled]="!camposUpdateCompletos" (click)="modificarCliente()" class="btn btnYinoSports">Actualizar Cliente&nbsp;
+                    <i class="fas fa-sync"></i>
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+    
+
+
+
